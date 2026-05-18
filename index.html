@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Filtrona Lunch &amp; Discussion for AI · 19 May 2026</title>
+<meta name="description" content="Interactive AI lunch session deck for Filtrona — practical Copilot, prompt craft, and workflow automation." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,700;9..144,900&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  /* Filtrona palette */
+  --red:#d70a26;
+  --red-soft:rgba(215,10,38,.08);
+  --blue:#068fd3;
+  --blue-soft:rgba(6,143,211,.09);
+  --blue-deep:#0a5f8c;
+  --green:#8abd25;
+  --green-soft:rgba(138,189,37,.12);
+  --gold:#fab70c;
+  --gold-soft:rgba(250,183,12,.14);
+  --ice:#eaf3fb;
+
+  /* Neutrals */
+  --paper:#ffffff;
+  --ink:#1a1a1f;
+  --ink-2:#3b3c44;
+  --ink-3:#6b6c75;
+  --line:rgba(26,26,31,.08);
+  --line-2:rgba(26,26,31,.14);
+
+  /* Atmosphere */
+  --shadow-soft:0 1px 2px rgba(26,26,31,.04), 0 8px 24px rgba(10,77,146,.06);
+  --shadow-card:0 1px 2px rgba(26,26,31,.04), 0 12px 36px rgba(10,77,146,.08);
+
+  --radius:24px;
+  --radius-sm:14px;
+  --radius-pill:999px;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:#fbfcfe;color:var(--ink);font-family:"DM Sans","Helvetica Neue",Arial,sans-serif;overflow:hidden;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body::before{
+  content:"";position:fixed;inset:-20%;pointer-events:none;z-index:-1;
+  background:
+    radial-gradient(900px 700px at 8% 6%,rgba(6,143,211,.07),transparent 60%),
+    radial-gradient(700px 600px at 92% 14%,rgba(215,10,38,.05),transparent 60%),
+    radial-gradient(800px 700px at 78% 90%,rgba(138,189,37,.07),transparent 60%);
+}
+
+/* Deck shell */
+.deck-shell{height:100vh;display:grid;place-items:center;padding:24px}
+.deck{
+  width:min(100vw - 48px, calc((100vh - 48px) * 16/9));
+  height:min(100vh - 48px, calc((100vw - 48px) * 9/16));
+  aspect-ratio:16/9;
+  position:relative;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:28px;
+  overflow:hidden;
+  box-shadow:0 1px 2px rgba(26,26,31,.04), 0 30px 80px rgba(10,77,146,.10);
+}
+
+/* Slide base */
+.slide{
+  position:absolute;inset:0;
+  padding:64px 80px 56px;
+  opacity:0;transform:translateX(2%);
+  transition:opacity .45s cubic-bezier(.2,.7,.2,1),transform .45s cubic-bezier(.2,.7,.2,1);
+  display:grid;grid-template-rows:auto 1fr auto;gap:28px;
+  pointer-events:none;
+}
+.slide.active{opacity:1;transform:translateX(0);pointer-events:auto}
+.slide.prev{transform:translateX(-2%)}
+
+/* Header & footer */
+.slide-header{display:flex;align-items:center;justify-content:space-between;gap:24px;min-height:40px}
+.brand{display:flex;align-items:center;gap:14px}
+.brand img{height:30px;max-width:140px;object-fit:contain}
+.brand .dot{width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--blue),var(--green));display:inline-block}
+.brand .meta{font-size:13px;color:var(--ink-3);font-weight:500;letter-spacing:.04em;text-transform:uppercase}
+
+.kicker{
+  font-family:"DM Sans",sans-serif;
+  font-size:13px;color:var(--blue);font-weight:600;
+  letter-spacing:.18em;text-transform:uppercase;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.kicker::before{content:"";width:24px;height:1px;background:var(--blue);display:inline-block}
+
+.slide-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:13px;color:var(--ink-3);font-weight:500;letter-spacing:.04em
+}
+.slide-number{font-variant-numeric:tabular-nums;font-family:"JetBrains Mono",monospace}
+.timer{font-variant-numeric:tabular-nums;color:var(--red);font-weight:600;font-family:"JetBrains Mono",monospace}
+
+/* Typography */
+h1,h2,h3,h4,p{margin:0}
+.display{
+  font-family:"Fraunces",Georgia,serif;
+  font-weight:500;
+  font-optical-sizing:auto;
+  font-variation-settings:"opsz" 96, "SOFT" 30;
+  letter-spacing:-.025em;
+  line-height:.98;
+  color:var(--ink);
+}
+h1.display{font-size:88px}
+h2.display{font-size:60px}
+h3.display{font-size:40px;letter-spacing:-.02em;line-height:1.05}
+.eyebrow{
+  font-family:"DM Sans",sans-serif;
+  font-size:14px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-3)
+}
+.lead{font-family:"DM Sans",sans-serif;font-size:22px;line-height:1.45;color:var(--ink-2);font-weight:400;max-width:880px}
+.body-l{font-size:19px;line-height:1.5;color:var(--ink-2)}
+.body-m{font-size:17px;line-height:1.5;color:var(--ink-2)}
+.body-s{font-size:15px;line-height:1.5;color:var(--ink-3)}
+.mono{font-family:"JetBrains Mono",monospace;font-size:14px;letter-spacing:-.01em}
+strong{color:var(--ink);font-weight:600}
+em{font-style:italic;color:var(--blue-deep)}
+
+/* Accent colors */
+.c-red{color:var(--red)}
+.c-blue{color:var(--blue)}
+.c-green{color:#5b8814}
+.c-gold{color:#8a5a00}
+
+/* Pills & tags */
+.pill{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1px solid var(--line-2);border-radius:var(--radius-pill);
+  padding:7px 14px;background:#fff;color:var(--ink-2);
+  font-weight:500;font-size:13px;letter-spacing:.01em
+}
+.pill svg{width:14px;height:14px}
+.pill-red{background:var(--red-soft);color:var(--red);border-color:rgba(215,10,38,.18)}
+.pill-blue{background:var(--blue-soft);color:var(--blue);border-color:rgba(6,143,211,.20)}
+.pill-green{background:var(--green-soft);color:#5b8814;border-color:rgba(138,189,37,.28)}
+.pill-gold{background:var(--gold-soft);color:#8a5a00;border-color:rgba(250,183,12,.30)}
+.pill-ghost{background:#fff;color:var(--ink-3)}
+
+/* Cards */
+.card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:28px;
+  box-shadow:var(--shadow-card);
+  display:flex;flex-direction:column;gap:14px;
+}
+.card.flat{box-shadow:none;background:#fbfcfe;border:1px solid var(--line)}
+.card.tint-blue{background:linear-gradient(180deg,#fff 0%,var(--blue-soft) 100%);border-color:rgba(6,143,211,.15)}
+.card.tint-red{background:linear-gradient(180deg,#fff 0%,var(--red-soft) 100%);border-color:rgba(215,10,38,.14)}
+.card.tint-green{background:linear-gradient(180deg,#fff 0%,var(--green-soft) 100%);border-color:rgba(138,189,37,.20)}
+.card.tint-gold{background:linear-gradient(180deg,#fff 0%,var(--gold-soft) 100%);border-color:rgba(250,183,12,.22)}
+.card h3{font-family:"DM Sans",sans-serif;font-size:22px;font-weight:600;color:var(--ink);letter-spacing:-.01em}
+.card h4{font-family:"DM Sans",sans-serif;font-size:16px;font-weight:600;color:var(--ink-2);letter-spacing:.02em;text-transform:uppercase}
+.card .body-m, .card .body-l{color:var(--ink-2)}
+
+/* Grids */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.split-12-08{display:grid;grid-template-columns:1.2fr .8fr;gap:36px;align-items:center}
+.split-08-12{display:grid;grid-template-columns:.8fr 1.2fr;gap:36px;align-items:center}
+.stack{display:flex;flex-direction:column;gap:18px}
+.stack-sm{display:flex;flex-direction:column;gap:10px}
+.row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+
+/* Icon tiles */
+.icon-tile{
+  width:56px;height:56px;border-radius:16px;
+  display:grid;place-items:center;
+  background:linear-gradient(135deg,#fff,var(--ice));
+  border:1px solid var(--line);
+  box-shadow:0 1px 2px rgba(26,26,31,.03);
+  flex-shrink:0;
+}
+.icon-tile svg{width:28px;height:28px}
+.icon-tile.tile-red{background:linear-gradient(135deg,#fff,var(--red-soft));border-color:rgba(215,10,38,.18)}
+.icon-tile.tile-red svg{color:var(--red)}
+.icon-tile.tile-blue{background:linear-gradient(135deg,#fff,var(--blue-soft));border-color:rgba(6,143,211,.20)}
+.icon-tile.tile-blue svg{color:var(--blue)}
+.icon-tile.tile-green{background:linear-gradient(135deg,#fff,var(--green-soft));border-color:rgba(138,189,37,.25)}
+.icon-tile.tile-green svg{color:#5b8814}
+.icon-tile.tile-gold{background:linear-gradient(135deg,#fff,var(--gold-soft));border-color:rgba(250,183,12,.28)}
+.icon-tile.tile-gold svg{color:#a06600}
+.icon-tile.lg{width:72px;height:72px;border-radius:20px}
+.icon-tile.lg svg{width:36px;height:36px}
+
+/* Tool item (icon + label) */
+.tool{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 16px;border:1px solid var(--line);border-radius:var(--radius-sm);
+  background:#fff;
+}
+.tool .icon-tile{width:44px;height:44px;border-radius:12px}
+.tool .icon-tile svg{width:22px;height:22px}
+.tool-label{font-size:15px;font-weight:600;color:var(--ink);line-height:1.2}
+.tool-sub{font-size:13px;color:var(--ink-3);line-height:1.3;margin-top:2px}
+
+/* Number badge */
+.numbadge{
+  width:36px;height:36px;border-radius:50%;
+  display:grid;place-items:center;
+  background:var(--ink);color:#fff;
+  font-family:"Fraunces",serif;font-weight:600;font-size:18px;
+  flex-shrink:0;
+}
+.numbadge.b-red{background:var(--red)}
+.numbadge.b-blue{background:var(--blue)}
+.numbadge.b-green{background:#5b8814}
+
+/* QR placeholder & menti box */
+.menti-box{
+  background:linear-gradient(135deg,var(--ice),#fff);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:36px;
+  display:grid;grid-template-columns:auto 1fr;gap:32px;align-items:center;
+  box-shadow:var(--shadow-card);
+}
+.qr-frame{
+  width:220px;height:220px;border-radius:20px;background:#fff;
+  border:2px solid var(--ink);position:relative;display:grid;place-items:center;
+  overflow:hidden;
+}
+.qr-frame::before{
+  content:"";position:absolute;inset:14px;
+  background-image:
+    radial-gradient(circle at 12% 12%,#000 6%,transparent 6.5%),
+    radial-gradient(circle at 88% 12%,#000 6%,transparent 6.5%),
+    radial-gradient(circle at 12% 88%,#000 6%,transparent 6.5%),
+    linear-gradient(45deg,#000 12%,transparent 12.5%,transparent 50%,#000 50.5%,#000 62%,transparent 62.5%),
+    linear-gradient(-45deg,transparent 30%,#000 30.5%,#000 38%,transparent 38.5%,transparent 70%,#000 70.5%);
+  background-size:100% 100%, 100% 100%, 100% 100%, 14px 14px, 14px 14px;
+  opacity:.85;
+}
+.qr-frame .qr-label{position:relative;z-index:2;background:#fff;padding:6px 12px;border-radius:8px;font-size:11px;font-weight:600;color:var(--ink-3);letter-spacing:.08em}
+
+/* Code blocks */
+pre.code{
+  background:#0f1419;color:#e6e8ec;
+  border-radius:var(--radius-sm);
+  padding:20px 22px;font-family:"JetBrains Mono",monospace;
+  font-size:14px;line-height:1.6;
+  overflow:hidden;margin:0;
+  border:1px solid rgba(255,255,255,.06);
+}
+pre.code .k{color:#7dd3fc}
+pre.code .v{color:#bef264}
+pre.code .c{color:#a1a1aa;font-style:italic}
+
+/* Quote */
+.quote-box{
+  border-left:3px solid var(--red);
+  padding:8px 0 8px 22px;
+  font-family:"Fraunces",serif;
+  font-size:26px;line-height:1.3;
+  color:var(--ink);font-weight:400;letter-spacing:-.01em;
+}
+
+/* Big stat */
+.big-stat{
+  font-family:"Fraunces",serif;font-weight:700;
+  font-size:140px;line-height:.85;letter-spacing:-.05em;
+  background:linear-gradient(135deg,var(--red),var(--blue));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+
+/* CRAFT-V diagram */
+.craft-letters{display:flex;gap:14px;flex-wrap:wrap}
+.craft-letter{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  width:138px;padding:18px 14px;
+  background:#fff;border:1px solid var(--line);border-radius:18px;
+  box-shadow:var(--shadow-soft);
+}
+.craft-letter .L{
+  font-family:"Fraunces",serif;font-weight:700;font-size:42px;line-height:1;
+  background:linear-gradient(135deg,var(--red),var(--blue));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.craft-letter .W{font-size:14px;font-weight:600;color:var(--ink);margin-top:6px;letter-spacing:.01em}
+.craft-letter .D{font-size:12px;color:var(--ink-3);margin-top:4px;text-align:center;line-height:1.3}
+
+/* Comparison table for approved vs personal */
+.split-table{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:0;border:1px solid var(--line);
+  border-radius:var(--radius);overflow:hidden;
+  background:#fff;
+}
+.split-table .col{padding:24px 26px}
+.split-table .col.left{background:linear-gradient(180deg,#fff,var(--blue-soft));border-right:1px solid var(--line)}
+.split-table .col.right{background:linear-gradient(180deg,#fff,var(--gold-soft))}
+.split-table h4{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);font-weight:600;margin-bottom:14px}
+.split-table h3{font-family:"DM Sans",sans-serif;font-size:20px;font-weight:600;color:var(--ink);margin-bottom:12px}
+.split-table ul{margin:0;padding:0;list-style:none}
+.split-table li{font-size:14px;color:var(--ink-2);padding:6px 0;display:flex;gap:8px;align-items:flex-start;line-height:1.4}
+.split-table li::before{content:"";width:5px;height:5px;border-radius:50%;background:currentColor;margin-top:8px;flex-shrink:0;opacity:.5}
+
+/* Data-security banner */
+.security-banner{
+  display:flex;align-items:center;gap:18px;
+  background:linear-gradient(135deg,#fff,var(--red-soft));
+  border:1px solid rgba(215,10,38,.20);
+  border-radius:var(--radius-sm);padding:18px 22px;
+}
+.security-banner svg{flex-shrink:0}
+.security-banner .t{font-size:15px;color:var(--ink-2);line-height:1.45}
+.security-banner .t strong{color:var(--red)}
+
+/* Use case grid */
+.uc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.uc-card{
+  background:#fff;border:1px solid var(--line);border-radius:18px;
+  padding:18px;display:flex;flex-direction:column;gap:10px;
+}
+.uc-card .uc-icon{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:var(--blue-soft);color:var(--blue)}
+.uc-card .uc-icon svg{width:18px;height:18px}
+.uc-card h4{font-size:15px;font-weight:600;color:var(--ink);letter-spacing:-.005em}
+.uc-card .body-s{font-size:13px;line-height:1.45;color:var(--ink-3)}
+
+/* Prompt comparison */
+.prompt-compare{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.prompt-card{
+  border-radius:18px;padding:22px 24px;border:1px solid var(--line);
+  background:#fff;display:flex;flex-direction:column;gap:14px;
+}
+.prompt-card.a{background:linear-gradient(180deg,#fff,rgba(0,0,0,.02))}
+.prompt-card.b{background:linear-gradient(180deg,#fff,var(--green-soft));border-color:rgba(138,189,37,.25)}
+.prompt-card .label{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.prompt-card.b .label{color:#5b8814}
+.prompt-card .text{font-family:"DM Sans",sans-serif;font-size:15px;line-height:1.55;color:var(--ink-2);font-weight:400}
+.prompt-card .text em{color:#5b8814;font-style:normal;font-weight:600;background:var(--green-soft);padding:2px 6px;border-radius:6px}
+
+/* Run-of-show timeline */
+.timeline{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;border-top:1px solid var(--line);padding-top:18px}
+.timeline .seg{display:flex;flex-direction:column;gap:6px}
+.timeline .bar{height:6px;border-radius:3px;background:var(--ice)}
+.timeline .seg.active .bar{background:linear-gradient(90deg,var(--blue),var(--red))}
+.timeline .t{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--ink-3)}
+.timeline .l{font-size:11px;font-weight:600;color:var(--ink-2);letter-spacing:.02em}
+
+/* Spectrum diagram (Copilot tiers) */
+.spectrum{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:stretch}
+.spec-tier{
+  border-radius:var(--radius);padding:24px;border:1px solid var(--line);
+  display:flex;flex-direction:column;gap:14px;background:#fff;
+  position:relative;
+}
+.spec-tier .ttag{display:inline-flex;align-self:flex-start;padding:5px 12px;border-radius:999px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.spec-tier.t1{background:linear-gradient(180deg,#fff,var(--ice))}
+.spec-tier.t1 .ttag{background:var(--blue-soft);color:var(--blue)}
+.spec-tier.t2{background:linear-gradient(180deg,#fff,var(--green-soft));border-color:rgba(138,189,37,.22)}
+.spec-tier.t2 .ttag{background:rgba(138,189,37,.18);color:#5b8814}
+.spec-tier.t3{background:linear-gradient(180deg,#fff,var(--red-soft));border-color:rgba(215,10,38,.16)}
+.spec-tier.t3 .ttag{background:var(--red-soft);color:var(--red)}
+.spec-tier h3{font-family:"DM Sans",sans-serif;font-size:22px;font-weight:700;color:var(--ink);letter-spacing:-.01em}
+.spec-tier .price{font-family:"Fraunces",serif;font-size:30px;font-weight:600;color:var(--ink);line-height:1}
+.spec-tier .price small{font-family:"DM Sans",sans-serif;font-size:13px;color:var(--ink-3);font-weight:500}
+.spec-tier ul{margin:0;padding:0;list-style:none}
+.spec-tier li{font-size:13px;line-height:1.45;color:var(--ink-2);padding:5px 0;display:flex;gap:8px}
+.spec-tier li::before{content:"✓";color:#5b8814;font-weight:700;flex-shrink:0}
+.spec-tier li.no::before{content:"—";color:var(--ink-3)}
+
+/* Habit list */
+.habit-list{display:flex;flex-direction:column;gap:14px}
+.habit-row{
+  display:flex;align-items:center;gap:18px;
+  padding:16px 20px;
+  background:#fff;border:1px solid var(--line);border-radius:18px;
+}
+.habit-row .num{font-family:"Fraunces",serif;font-size:32px;font-weight:600;color:var(--blue);line-height:1;width:36px;flex-shrink:0}
+.habit-row .txt{font-size:17px;color:var(--ink-2);line-height:1.4}
+
+/* Hero with rotating element */
+.hero-art{
+  position:relative;width:100%;height:100%;
+  display:grid;place-items:center;
+}
+.hero-shape{
+  position:absolute;border-radius:50%;mix-blend-mode:multiply;
+  filter:blur(20px);opacity:.5;animation:float 14s ease-in-out infinite;
+}
+.hero-shape.s1{width:280px;height:280px;background:var(--red);top:5%;left:5%;animation-delay:0s}
+.hero-shape.s2{width:260px;height:260px;background:var(--blue);top:30%;right:0%;animation-delay:-5s}
+.hero-shape.s3{width:240px;height:240px;background:var(--green);bottom:5%;left:20%;animation-delay:-10s}
+@keyframes float{
+  0%,100%{transform:translate(0,0)}
+  33%{transform:translate(30px,-20px)}
+  66%{transform:translate(-20px,30px)}
+}
+.hero-content{position:relative;z-index:2}
+.hero-stat-row{display:flex;gap:36px;margin-top:18px;align-items:baseline}
+.hero-stat .n{font-family:"Fraunces",serif;font-size:48px;font-weight:600;color:var(--ink);line-height:1;letter-spacing:-.02em}
+.hero-stat .l{font-size:13px;color:var(--ink-3);margin-top:4px;letter-spacing:.04em;text-transform:uppercase;font-weight:500}
+
+/* Filtrona example specifics */
+.flow-chip{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:10px 14px;border-radius:12px;
+  background:#fff;border:1px solid var(--line);
+  font-size:13px;color:var(--ink-2);font-weight:500;
+}
+.flow-chip svg{width:16px;height:16px;color:var(--blue)}
+.arrow{display:inline-flex;align-items:center;color:var(--ink-3);font-family:"JetBrains Mono",monospace;font-size:13px}
+
+/* Notes panel */
+.notes-panel{
+  position:absolute;left:24px;right:24px;bottom:24px;
+  background:rgba(255,255,255,.97);backdrop-filter:blur(12px);
+  border:1px solid var(--line);border-radius:18px;
+  padding:18px 22px;display:none;
+  max-height:36vh;overflow-y:auto;
+  box-shadow:0 12px 32px rgba(10,77,146,.10);
+  z-index:50;
+}
+.notes-panel.visible{display:block}
+.notes-panel h4{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);font-weight:600;margin-bottom:8px}
+.notes-panel p{font-size:14px;line-height:1.5;color:var(--ink-2)}
+
+/* Controls bar */
+.controls{
+  position:fixed;bottom:20px;right:20px;display:flex;gap:8px;z-index:60;
+}
+.ctrl-btn{
+  background:rgba(255,255,255,.94);backdrop-filter:blur(8px);
+  border:1px solid var(--line);border-radius:12px;
+  padding:9px 12px;display:flex;align-items:center;gap:6px;
+  font-size:12px;color:var(--ink-2);font-weight:500;
+  cursor:pointer;transition:all .15s ease;
+  font-family:"DM Sans",sans-serif;
+}
+.ctrl-btn:hover{background:#fff;border-color:var(--line-2)}
+.ctrl-btn svg{width:14px;height:14px}
+.ctrl-btn.active{background:var(--red);color:#fff;border-color:var(--red)}
+
+/* Help overlay */
+.help{
+  position:fixed;top:20px;right:20px;
+  background:rgba(255,255,255,.94);backdrop-filter:blur(8px);
+  border:1px solid var(--line);border-radius:12px;
+  padding:10px 14px;font-size:11px;color:var(--ink-3);
+  z-index:60;letter-spacing:.02em;
+}
+.help kbd{
+  font-family:"JetBrains Mono",monospace;
+  background:var(--ink);color:#fff;
+  padding:1px 6px;border-radius:4px;font-size:10px;
+  margin:0 2px;
+}
+
+/* Progress bar */
+.progress{
+  position:absolute;bottom:0;left:0;right:0;height:3px;
+  background:rgba(26,26,31,.05);overflow:hidden;
+}
+.progress .fill{
+  height:100%;background:linear-gradient(90deg,var(--blue),var(--red));
+  transition:width .35s ease;
+}
+
+/* Print friendly */
+@media print{
+  .controls,.help,.notes-panel,.progress{display:none!important}
+  .slide{position:relative;page-break-after:always;opacity:1!important;transform:none!important}
+}
+
+/* Smaller screens — keep proportional */
+@media (max-width:900px){
+  .slide{padding:36px 40px 32px}
+  h1.display{font-size:54px}
+  h2.display{font-size:40px}
+}
+</style>
+</head>
+
+<body>
+
+<!-- SVG ICON LIBRARY (defs only, referenced by <use>) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<defs>
+  <!-- chat bubble -->
+  <symbol id="i-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 12a8 8 0 0 1-11.5 7.2L4 21l1.8-5.3A8 8 0 1 1 21 12z"/>
+  </symbol>
+  <!-- envelope -->
+  <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="5" width="18" height="14" rx="2"/>
+    <path d="m3 7 9 6 9-6"/>
+  </symbol>
+  <!-- document -->
+  <symbol id="i-doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+    <path d="M14 3v6h6"/>
+    <path d="M9 13h6M9 17h4"/>
+  </symbol>
+  <!-- spreadsheet grid -->
+  <symbol id="i-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="3" width="18" height="18" rx="2"/>
+    <path d="M3 9h18M3 15h18M9 3v18M15 3v18"/>
+  </symbol>
+  <!-- slides / presentation -->
+  <symbol id="i-slides" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="4" width="18" height="13" rx="2"/>
+    <path d="M8 21h8M12 17v4"/>
+  </symbol>
+  <!-- team / users -->
+  <symbol id="i-team" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="9" cy="8" r="3.2"/>
+    <path d="M3 19c.6-3.3 3-5.5 6-5.5s5.4 2.2 6 5.5"/>
+    <circle cx="17" cy="9" r="2.4"/>
+    <path d="M21 18c-.4-2-1.7-3.3-3.5-3.7"/>
+  </symbol>
+  <!-- lightning / automate -->
+  <symbol id="i-bolt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M13 2 4 14h7l-1 8 9-12h-7z"/>
+  </symbol>
+  <!-- video / clip -->
+  <symbol id="i-video" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2" y="6" width="14" height="12" rx="2"/>
+    <path d="m22 8-6 4 6 4z"/>
+  </symbol>
+  <!-- shield -->
+  <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 22s8-3.5 8-10V5l-8-3-8 3v7c0 6.5 8 10 8 10z"/>
+    <path d="m9 12 2 2 4-4"/>
+  </symbol>
+  <!-- lock -->
+  <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="4" y="10" width="16" height="11" rx="2"/>
+    <path d="M8 10V7a4 4 0 0 1 8 0v3"/>
+  </symbol>
+  <!-- sparkle / AI -->
+  <symbol id="i-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M5.6 18.4l2.8-2.8M15.6 8.4l2.8-2.8"/>
+  </symbol>
+  <!-- factory -->
+  <symbol id="i-factory" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 21V10l5 3V10l5 3V10l5 3v8z"/>
+    <path d="M9 17h.01M14 17h.01"/>
+  </symbol>
+  <!-- gear -->
+  <symbol id="i-gear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="3"/>
+    <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>
+  </symbol>
+  <!-- chart up -->
+  <symbol id="i-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 3v18h18"/>
+    <path d="m7 14 4-4 4 4 5-7"/>
+  </symbol>
+  <!-- check circle -->
+  <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="9"/>
+    <path d="m8 12 3 3 5-6"/>
+  </symbol>
+  <!-- alert triangle -->
+  <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="m12 3 10 18H2z"/>
+    <path d="M12 10v5M12 18v.01"/>
+  </symbol>
+  <!-- arrow right -->
+  <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M5 12h14"/>
+    <path d="m13 5 7 7-7 7"/>
+  </symbol>
+  <!-- search -->
+  <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="11" cy="11" r="7"/>
+    <path d="m20 20-3-3"/>
+  </symbol>
+  <!-- briefcase -->
+  <symbol id="i-work" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="7" width="18" height="13" rx="2"/>
+    <path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/>
+  </symbol>
+  <!-- code -->
+  <symbol id="i-code" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/>
+  </symbol>
+  <!-- form -->
+  <symbol id="i-form" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="4" y="3" width="16" height="18" rx="2"/>
+    <path d="M8 8h8M8 12h8M8 16h5"/>
+  </symbol>
+  <!-- approval -->
+  <symbol id="i-approve" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 12 11 14 15 10"/>
+    <rect x="4" y="4" width="16" height="16" rx="2"/>
+  </symbol>
+  <!-- bell -->
+  <symbol id="i-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+    <path d="M10 21a2 2 0 0 0 4 0"/>
+  </symbol>
+  <!-- play -->
+  <symbol id="i-play" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M8 5v14l11-7z"/>
+  </symbol>
+  <!-- music -->
+  <symbol id="i-music" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 18V5l12-2v13"/>
+    <circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+  </symbol>
+  <!-- pause -->
+  <symbol id="i-pause" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M6 5h4v14H6zM14 5h4v14h-4z"/>
+  </symbol>
+  <!-- expand -->
+  <symbol id="i-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 9V4h5M21 9V4h-5M3 15v5h5M21 15v5h-5"/>
+  </symbol>
+  <!-- notes -->
+  <symbol id="i-notes" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+    <path d="M14 3v6h6M9 14h6M9 17h4"/>
+  </symbol>
+  <!-- people-add for community -->
+  <symbol id="i-add-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="9" cy="8" r="3.2"/>
+    <path d="M3 19c.6-3.3 3-5.5 6-5.5s5.4 2.2 6 5.5"/>
+    <path d="M19 8v6M16 11h6"/>
+  </symbol>
+  <!-- trophy -->
+  <symbol id="i-trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M7 4h10v6a5 5 0 0 1-10 0z"/>
+    <path d="M5 6H2v2a3 3 0 0 0 5 3M19 6h3v2a3 3 0 0 1-5 3M9 20h6M12 14v6"/>
+  </symbol>
+  <!-- translate -->
+  <symbol id="i-translate" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 5h8M8 4v2M5 9a8 8 0 0 0 7 7"/>
+    <path d="M11 11a8 8 0 0 1-7 6"/>
+    <path d="M13 21h7l-3.5-8z"/>
+  </symbol>
+  <!-- box / package -->
+  <symbol id="i-box" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 8 12 3 3 8v8l9 5 9-5z"/>
+    <path d="M3 8l9 5 9-5M12 13v9"/>
+  </symbol>
+  <!-- people HR -->
+  <symbol id="i-hr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="8" r="4"/>
+    <path d="M4 21a8 8 0 0 1 16 0"/>
+  </symbol>
+</defs>
+</svg>
+
+<div class="deck-shell">
+  <div class="deck" id="deck">
+
+  <!-- =========================================== -->
+  <!-- Slide 01 — Title / Cover                    -->
+  <!-- =========================================== -->
+  <section class="slide active" data-notes="Welcome people as they settle in with lunch. Set the mood: this is a discussion, not a lecture. Phones encouraged for Mentimeter. Mention session length is 40 minutes, then Q&amp;A. Keep the opener warm.">
+    <div class="slide-header">
+      <div class="brand"><img src="assets/filtrona-logo-placeholder.svg" alt=""><span class="dot"></span><span class="meta">19 May 2026 · Singapore</span></div>
+      <div class="kicker">Session 01</div>
+    </div>
+    <div class="split-12-08">
+      <div class="hero-content stack">
+        <div class="eyebrow">Filtrona AI Programme</div>
+        <h1 class="display">Lunch &amp; <em>Discussion</em><br/>for AI.</h1>
+        <p class="lead">A practical hour on Copilot, prompt craft and workflow automation — what we can use safely at Filtrona tomorrow morning.</p>
+        <div class="hero-stat-row">
+          <div class="hero-stat"><div class="n">40<small style="font-size:24px;color:var(--ink-3)">m</small></div><div class="l">Session</div></div>
+          <div class="hero-stat"><div class="n">6</div><div class="l">Golden rules</div></div>
+          <div class="hero-stat"><div class="n">1</div><div class="l">Habit to take home</div></div>
+        </div>
+      </div>
+      <div class="hero-art" style="height:480px">
+        <div class="hero-shape s1"></div>
+        <div class="hero-shape s2"></div>
+        <div class="hero-shape s3"></div>
+        <div style="position:relative;z-index:2;display:grid;place-items:center;width:300px;height:300px;border-radius:50%;background:rgba(255,255,255,.7);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.8);box-shadow:0 30px 60px rgba(10,77,146,.18)">
+          <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="color:var(--ink)">
+            <path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M5.6 18.4l2.8-2.8M15.6 8.4l2.8-2.8"/>
+            <circle cx="12" cy="12" r="3.5"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>Presenter · Fiona Qi · IT Business Analyst</span>
+      <span class="slide-number"></span>
+    </div>
+  </section>
+
+  <!-- =========================================== -->
+  <!-- Slide 02 — Join via Mentimeter              -->
+  <!-- =========================================== -->
+  <section class="slide" data-notes="Ask people to scan now while you talk. Use the Menti dashboard on a second tab. Opening question is intentionally light: 'Which AI profile are you today?' so everyone can participate.">
+    <div class="slide-header">
+      <div class="kicker">Warm up</div>
+      <div class="timer" id="clockLabel">40:00</div>
+    </div>
+    <div class="split-08-12">
+      <div class="stack">
+        <h2 class="display">Join the <em>room</em>.</h2>
+        <p class="lead">Scan to join. First question is intentionally easy — no typing, no public answers.</p>
+        <div class="row">
+          <span class="pill pill-blue"><svg><use href="#i-chat"/></svg> 1 question</span>
+          <span class="pill pill-ghost">~30 seconds</span>
+          <span class="pill pill-ghost">Anonymous</span>
+        </div>
+      </div>
+      <div class="menti-box">
+        <div class="qr-frame"><span class="qr-label">menti.com</span></div>
+        <div class="stack-sm">
+          <div class="eyebrow">Mentimeter</div>
+          <h3 class="display">Which AI profile are you today?</h3>
+          <p class="body-m" style="color:var(--ink-3)">Beginner · Copilot user · Power user · Skeptic · Secretly using everything</p>
+          <p class="mono" style="color:var(--ink-3);margin-top:8px">[CONFIG.mentimeterJoinUrl]</p>
+        </div>
+      </div>
+    </div>
+    <div class="slide-footer"><span>Lunch &amp; Discussion for AI</span><span class="slide-number"></span></div>
+  </section>
+
+  <!-- =========================================== -->
+  <!-- Slide 03 — Why now / productivity habit     -->
+  <!-- =========================================== -->
+  <section class="slide" data-notes="The point is not 'AI is coming' — it is already here in our toolset. The productivity gap is shifting from access to capability. Land this in one breath.">
+    <div class="slide-header"><div class="kicker">Why this matters</div><div class="timer-mirror" data-timer></div></div>
+    <div class="split-12-08">
+      <div class="stack">
+        <h2 class="display">AI is no longer a tool.<br/>It is becoming a <em>work habit</em>.</h2>
+        <p class="lead">The question is no longer <em>do we have AI</em>. We do. The question is whether we know how to use it well.</p>
+        <p class="body-l">The productivity gap is moving from <strong>access</strong> → <strong>capability</strong>.</p>
+      </div>
+      <div class="card tint-blue">
+        <h4>What changed in 2025</h4>
+        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px">
+          <li class="body-m" style="display:flex;gap:10px"><svg style="width:18px;height:18px;color:var(--blue);flex-shrink:0;margin-top:3px"><use href="#i-check"/></svg><span>Copilot Chat became free with our existing M365 license</span></li>
+          <li class="body-m" style="display:flex;gap:10px"><svg style="width:18px;height:18px;color:var(--blue);flex-shrink:0;margin-top:3px"><use href="#i-check"/></svg><span>Enterprise Data Protection extended to chat by default</span></li>
+          <li class="body-m" style="display:flex;gap:10px"><svg style="width:18px;height:18px;color:var(--blue);flex-shrink:0;margin-top:3px"><use href="#i-check"/></svg><span>Copilot Studio agents now publishable to Teams and SharePoint</span></li>
+          <li class="body-m" style="display:flex;gap:10px"><svg style="width:18px;height:18px;color:var(--blue);flex-shrink:0;margin-top:3px"><use href="#i-check"/></svg><span>Power Automate templates do most weekly busywork without a single line of code</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="slide-footer"><span>Source: Microsoft Learn (Copilot licensing, Jan 2026)</span><span class="slide-number"></span></div>
+  </section>
+
+  <!-- =========================================== -->
+  <!-- Slide 04 — Run-of-show timeline             -->
+  <!-- =========================================== -->
+  <section class="slide" data-notes="A quick orientation slide. People relax when they know the shape of the next 40 minutes. Don't dwell — 30 seconds is enough.">
+    <div class="slide-header"><div class="kicker">The next 40 minutes</div><div class="timer-mirror" data-timer></div></div>
+    <div class="stack">
+      <h2 class="display">Here's what we'll cover.</h2>
+      <div class="timeline">
+        <div class="seg active"><div class="bar"></div><div class="t">0–3</div><div class="l">Warm up</div></div>
+        <div class="seg"><div class="bar"></div><div class="t">3–8</div><div class="l">Why now</div></div>
+        <div class="seg"><div class="bar"></div><div class="t">8–14</div><div class="l">Prompt craft</div></div>
+        <div class="seg"><div class="bar"></div><div class="t">14–24</div><div class="l">Copilot at work</div></div>
+        <div class="seg"><div class="bar"></div><div class="t">24–31</div><div class="l">Filtrona examples</div></div>
+        <div class="seg"><div class="bar"></div><div class="t">31–36</div><div class="l">Safety &amp; teams</div></div>
+        <div class="seg"><div class="bar"></div><div class="t">36–40</div><div class="l">Habits, what's next</div></div>
+      </div>
+      <p class="body-m" style="color:var(--ink-3);margin-top:16px">Mentimeter at four points · Q&amp;A after the close · Recording shared on the AI@Filtrona SharePoint</p>
+    </div>
+    <div class="slide-footer"><span class="mono">Agenda</span><span class="slide-number"></span></div>
+  </section>
+
+  <!-- =========================================== -->
+  <!-- Slide 05 — What AI is / isn't at work       -->
+  <!-- =========================================== -->
+  <section class="slide" data-notes="Best mental model: a very fast assistant that needs clear instructions and human review. Not a magic brain. Keep it conversational.">
+    <div class="slide-header"><div class="kicker">Mental model</div><div class="timer-mirror" data-timer></div></div>
+    <div class="split-12-08">
+      <div class="stack">
+        <h2 class="display">Not a magic brain.<br/>A <em>fast assistant</em>.</h2>
+        <p class="lead">At work, AI is a collection of capabilities. The mental model that actually helps is &ldquo;an assistant who needs clear instructions and human review.&rdquo;</p>
+      </div>
+      <div class="grid-2" style="gap:14px">
+        <div class="card flat"><div class="icon-tile tile-blue"><svg><use href="#i-doc"/></svg></div><h4>Summarise</h4></div>
+        <div class="card flat"><div class="icon-tile tile-green"><svg><use href="#i-spark"/></svg></div><h4>Draft</h4></div>
+        <div class="card flat"><div class="icon-tile tile-blue"><svg><use href="#i-translate"/></svg></div><h4>Translate</h4></div>
+        <div class="card flat"><div class="icon-tile tile-gold"><svg><use href="#i-chart"/></svg></div><h4>Analyse</h4></div>
+        <div class="card flat"><div class="icon-tile tile-red"><svg><use href="#i-bolt"/></svg></div><h4>Automate</h4></div>
+        <div class="card flat"><div class="icon-tile tile-green"><svg><use href="#i-search"/></svg></div><h4>Reason through options</h4></div>
+      </div>
+    </div>
+    <div class="slide-footer"><span class="mono">05 · What AI is</span><span class="slide-number"></span></div>
+  </section>
+
+  <!-- =========================================== -->
+  <!-- Slide 06 — Fluent ≠ Accurate                -->
+  <!-- =========================================== -->
+  <section class="slide" data-notes="This is the empathy slide. AI confidently produces wrong answers. The goal isn't fear — it's healthy skepticism and verification habits.">
+    <div class="slide-header"><div class="kicker">A warning that earns its place</div><div class="timer-mirror" data-timer></div></div>
+    <div class="split-08-12">
+      <div class="hero-art" style="height:380px;width:100%">
+        <div class="hero-shape s1" style="width:200px;height:200px;background:var(--red);top:20%;left:20%"></div>
+        <div style="position:relative;z-index:2;font-family:'Fraunces',serif;font-weight:700;font-size:200px;color:var(--ink);line-height:1;letter-spacing:-.06em">&ldquo; &rdquo;</div>
+      </div>
+      <div class="stack">
+        <h2 class="display"><em>Fluent</em> is not the same as <em>accurate</em>.</h2>
+        <p class="lead">AI can produce a great-looking answer with weak facts behind it. Outdated information. Misunderstood context. Inventions, if the question is vague.</p>
+        <div class="quote-box">The goal is not blind trust. The goal is better human–AI teamwork.</div>
+      </div>
+    </div>
+    <div class="slide-footer"><span class="mono">06 · A warning</span><span class="slide-number"></span></div>
+  </section>
+
+  <!-- =========================================== -->
+  <!-- Slide 07 — Six AI Golden Rules               -->
+  <!-- =========================================== -->
+  <section class="slide" data-notes="Read the six rules briefly. Pause on rule 6 — accountability stays with the human. The session can be summarised in these six lines if everything else is forgotten.">
+    <div class="slide-header"><div class="kicker">If you remember nothing else</div><div class="timer-mirror" data-timer></div></div>
+    <div class="stack">
+      <h2 class="display">Six Golden Rules.</h2>
+      <div class="grid-3" style="gap:18px">
+        <div class="card tint-blue" style="padding:22px"><div class="row"><div class="numbadge b-blue">1</div><h3>Protect data</h3></div><p class="body-m">No confidential content in public AI tools.</p></div>
+        <div class="card" style="padding:22px"><div class="row"><div class="numbadge b-blue">2</div><h3>Give context</h3></div><p class="body-m">Situation, audience, objective, constraints.</p></div>
+        <div class="card" style="padding:22px"><div class="row"><div class="numbadge b-blue">3</div><h3>Ask for format</h3></div><p class="body-m">Table, email, checklist, summary, outline.</p></div>
+        <div class="card" style="padding:22px"><div class="row"><div class="numbadge b-blue">4</div><h3>Verify facts</h3></div><p class="body-m">Especially numbers, names, dates, policies.</p></div>
+        <div class="card" style="padding:22px"><div class="row"><div class="numbadge b-blue">5</div><h3>Iterate</h3></div><p class="body-m">Improve, shorten, expand, challenge.</p></div>
+        <div class="card tint-red" style="padding:22px"><div class="row"><div class="numbadge b-red">6</div><h3>You stay accountable</h3></div><p class="body-m">AI assists. You sign off.</p></div>
+      </div>
+    </div>
+    <div class="slide-footer"><span class="mono">07 · Six rules</span><span class="slide-number"></span></div>
+  </section>
+
+  <!-- =========================================== -->
+  <!-- Slide 08 — CRAFT-V Prompt Method            -->
+  <!-- =========================================== -->
+  <section class="slide" data-notes="This is the most important practical teaching slide. CRAFT-V has six parts but spells C·R·A·F·T·V on purpose. You don't write every part every time — give just enough direction.">
+    <div class="slide-header"><div class="kicker">Prompt craft</div><div class="timer-mirror" data-timer></div></div>
+    <div class="stack">
+      <h2 class="display">The <em>CRAFT-V</em> method.</h2>
+      <p class="lead">Six parts. You don't always write all six. The point is enough direction for the AI to be useful — and a built-in habit of <strong>verification</strong>.</p>
+      <div class="craft-letters">
+        <div class="craft-letter"><div class="L">C</div><div class="W">Context</div><div class="D">What's the situation?</div></div>
+        <div class="craft-letter"><div class="L">R</div><div class="W">Role</div><div class="D">Who should AI act as?</div></div>
+        <div class="craft-letter"><div class="L">A</div><div class="W">Action</div><div class="D">What exactly to do?</div></div>
+        <div class="craft-letter"><div class="L">F</div><div class="W">Format</div><div class="D">What should output look like?</div></div>
+        <div class="craft-letter"><div class="L">T</div><div class="W">Tone</div><div class="D">How should it sound?</div></div>
+        <div class="craft-letter" style="background:linear-gradient(180deg,#fff,var(--red-soft));border-color:rgba(215,10,38,.20)"><div class="L">V</div><div class="W">Verify</div><div class="D">What to check before sending?</div></div>
+      </div>
+    </div>
+    <div class="slide-footer"><span class="mono">08 · CRAFT-V</span><span class="slide-number"></span></div>
+  </section>
+
+  <!-- =========================================== -->
+  <!-- Slide 09 — Prompt Battle                    -->
+  <!-- =========================================== -->
+  <section class="slide" data-notes="Run the Mentimeter prompt-battle vote here. Both prompts are plausible — that's the point. Read both aloud, ask the room to vote, then reveal that B asks for actionable output, not just observations.">
+    <div class="slide-header"><div class="kicker">Live vote · Mentimeter</div><div class="timer-mirror" data-timer></div></div>
+    <div class="stack">
+      <h2 class="display">Same AI. <em>Different</em> output.</h2>
+      <p class="lead">Both prompts are reasonable. Which one will produce a more useful answer for a regional MD on Monday morning?</p>
+      <div class="prompt-compare">
+        <div class="prompt-card a">
+          <div class="label">Prompt A</div>
+          <div class="text">&ldquo;Act as a business analyst. Review this monthly sales report and identify the key trends and risks. Output as a short summary.&rdquo;</div>
+          <p class="body-s" style="margin-top:8px"><span class="pill pill-ghost">Asks for: observations</span></p>
+        </div>
+        <div class="prompt-card b">
+          <div class="label">Prompt B</div>
+          <div class="text">&ldquo;Act as a business analyst. Review this monthly sales report for a regional MD. Identify the key trends, anomalies, and risks — and the <em>three actions</em> the MD should take this week. Output as a table: <em>Observation · Evidence · Implication · Recommended action · Confidence</em>. List any assumptions.&rdquo;</div>
+          <p class="body-s" style="margin-top:8px"><span class="pill pill-ghost">Asks for: decisions</span></p>
+        </div>
+      </div>
+    </div>
+    <div class="slide-footer"><span class="mono">09 · Prompt battle</span><span class="slide-number"></span></div>
+  </section>
+
+  <!-- =========================================== -->
+  <!-- Slide 10 — Microsoft-first at Filtrona      -->
+  <!-- =========================================== -->
+  <section class="slide" data-notes="Pivot: we have Microsoft E5. Copilot Chat is included. We don't need to chase other tools for work content. Use this as the bridge into the spectrum slide.">
+    <div class="slide-header"><div class="kicker">Pivot</div><div class="timer-mirror" data-timer></div></div>
+    <div class="split-12-08">
+      <div class="stack">
+        <h2 class="display"><em>Microsoft-first</em> at Filtrona.</h2>
+        <p class="lead">We run Microsoft 365 E5. Copilot Chat with Enterprise Data Protection is already part of that license — no extra purchase, no admin ticket.</p>
+        <p class="body-l">External tools (ChatGPT, Claude, Gemini, image generators) are useful for learning and creativity. They do not handle Filtrona work data. <strong>That line is the foundation of everything else today.</strong></p>
+      </div>
+      <div class="card tint-blue">
+        <h4>Our license entitles us to</h4>
+        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px">
+          <li class="body-m" style="display:flex;gap:10px;align-items:flex-start"><svg style="width:18px;height:18px;color:var(--blue);flex-shrink:0;margin-top:3px"><use href="#i-check"/></svg><span><strong>Copilot Chat</strong> at <span class="mono">m365copilot.com</span> with Enterprise Data Protection</span></li>
+          <li class="body-m" style="display:flex;gap:10px;align-items:flex-start"><svg style="width:18px;height:18px;color:var(--blue);flex-shrink:0;margin-top:3px"><use href="#i-check"/></svg><span><strong>Power Automate</strong> with all <strong>standard connectors</strong></span></li>
+          <li class="body-m" style="display:flex;gap:10px;align-items:flex-start"><svg style="width:18px;height:18px;color:var(--blue);flex-shrink:0;margin-top:3px"><use href="#i-check"/></svg><span><strong>Copilot Studio</strong> trial (30 days, extendable to 60)</span></li>
+          <li class="body-m" style="display:flex;gap:10px;align-items:flex-start"><svg style="width:18px;height:18px;color:var(--blue);flex-shrink:0;margin-top:3px"><use href="#i-check"/></svg><span><strong>Security Copilot</strong> allocation (since Nov 2025)</span></li>
+        </ul>
+        <p class="body-s" style="margin-top:6px">Source: Microsoft Learn, Copilot licensing reference 2026.</p>
+      </div>
+    </div>
+    <div class="slide-footer"><span class="mono">10 · Microsoft-first</span><span class="slide-number"></span></div>
+  </section>
+
+  <!-- =========================================== -->
+  <!-- Slide 11 — The Copilot Spectrum             -->
+  <!-- =========================================== -->
+  <section class="slide" data-notes="Critical clarity slide. Most colleagues do not know there are three tiers. Make it concrete: what's free, what costs, what's consumption-based. Source everything to Microsoft Learn.">
+    <div class="slide-header"><div class="kicker">Get the names right</div><div class="timer-mirror" data-timer></div></div>
+    <div class="stack">
+      <h2 class="display">The <em>Copilot spectrum</em>.</h2>
+      <p class="lead">Three different Copilots, three different scopes. Confusing the names creates confusion about what's safe and what's possible.</p>
+      <div class="spectrum">
+        <div class="spec-tier t1">
+          <span class="ttag">Included with E5</span>
+          <h3>Copilot Chat</h3>
+          <div class="price">Free<small> · with our license</small></div>
+          <ul>
+            <li>Web-grounded chat</li>
+            <li>Enterprise Data Protection</li>
+            <li>File upload in chat (per conversation)</li>
+            <li>Image generation (limited)</li>
+            <li class="no">Cannot reach your work email, files or Teams</li>
+          </ul>
+        </div>
+        <div class="spec-tier t2">
+          <span class="ttag">Paid add-on</span>
+          <h3>Microsoft 365 Copilot</h3>
+          <div class="price">~$30<small> /user/month · enterprise list price</small></div>
+          <ul>
+            <li>Everything in Copilot Chat</li>
+            <li>Grounded in <strong>your</strong> work data (Graph)</li>
+            <li>In-app: Word, Excel, PowerPoint, Outlook, Teams</li>
+            <li>Work / Web toggle</li>
+            <li>Priority access</li>
+          </ul>
+        </div>
+        <div class="spec-tier t3">
+          <span class="ttag">Consumption</span>
+          <h3>Copilot Studio</h3>
+          <div class="price">Pay-as-you-go<small> · Copilot Credits</small></div>
+          <ul>
+            <li>Build custom agents (low-code)</li>
+            <li>30-day free trial, extendable to 60</li>
+            <li>Publish to Teams, SharePoint, web</li>
+            <li>Capacity packs: $200 / 25,000 credits</li>
+            <li>Standalone allows premium connectors</li>
+          </ul>
+        </div>
+      </div>
+      <p class="body-s" style="color:var(--ink-3)">Pricing and entitlements per Microsoft Learn (microsoft.com/en-us/microsoft-365-copilot/pricing) and Copilot Studio licensing docs, retrieved May 2026.</p>
+    </div>
+    <div class="slide-footer"><span class="mono">11 · The spectrum</span><span class="slide-number"></span></div>
+  </section>
+
+  <!-- =========================================== -->
+  <!-- Slide 12 — Copilot across M365 (unified)    -->
+  <!-- =========================================== -->
+  <section class="slide" data-notes="One consolidated slide instead of five. For each app, the prompt is the demo. You can do a live 30-second demo on one of them — pick the one your environment has open and ready.">
+    <div class="slide-header"><div class="kicker">Where Copilot fits</div><div class="timer-mirror" data-timer></div></div>
+    <div class="stack">
+      <h2 class="display">Copilot, across the apps you already open.</h2>
+      <div class="grid-3" style="gap:16px">
+        <div class="card" style="padding:20px">
+          <div class="row"><div class="icon-tile tile-blue"><svg><use href="#i-chat"/></svg></div><h3 style="margin:0;font-size:20px">Chat</h3></div>
+          <p class="body-m">First draft, brainstorm, structure, rewrite.</p>
+          <p class="mono" style="color:var(--ink-3);font-size:12px">&ldquo;Prepare a 5-minute briefing on Q1 commercial trends for senior leaders.&rdquo;</p>
+        </div>
+        <div class="card" style="padding:20px">
+          <div class="row"><div class="icon-tile tile-blue"><svg><use href="#i-team"/></svg></div><h3 style="margin:0;font-size:20px">Teams</h3></div>
+          <p class="body-m">Meeting recap, decisions, action items, follow-up email.</p>
+          <p class="mono" style="color:var(--ink-3);font-size:12px">&ldquo;Draft a follow-up email with the decisions and owners.&rdquo;</p>
+        </div>
+        <div class="card" style="padding:20px">
+          <div class="row"><div class="icon-tile tile-blue"><svg><use href="#i-mail"/></svg></div><h3 style="margin:0;font-size:20px">Outlook</h3></div>
+          <p class="body-m">Thread summary, tone rewrite, scheduling.</p>
+          <p class="mono" style="color:var(--ink-3);font-size:12px">&ldquo;Rewrite professionally; keep meaning unchanged.&rdquo;</p>
+        </div>
+        <div class="card" style="padding:20px">
+          <div class="row"><div class="icon-tile tile-blue"><svg><use href="#i-doc"/></svg></div><h3 style="margin:0;font-size:20px">Word</h3></div>
+          <p class="body-m">First drafts, structured documents, executive updates.</p>
+          <p class="mono" style="color:var(--ink-3);font-size:12px">&ldquo;Turn these notes into a one-page exec update.&rdquo;</p>
+        </div>
+        <div class="card" style="padding:20px">
+          <div class="row"><div class="icon-tile tile-green"><svg><use href="#i-grid"/></svg></div><h3 style="margin:0;font-size:20px">Excel</h3></div>
+          <p class="body-m">Trend explanation, formula help, anomaly hunting.</p>
+          <p class="mono" style="color:var(--ink-3);font-size:12px">&ldquo;Explain what drove the variance vs forecast.&rdquo;</p>
+        </div>
+        <div class="card" style="padding:20px">
+          <div class="row"><div class="icon-tile tile-red"><svg><use href="#i-slides"/></svg></div><h3 style="margin:0;font-size:20px">PowerPoint</h3></div>
+          <p class="body-m">First draft from a Word brief, restructuring, narrative help.</p>
+          <p class="mono" style="color:var(--ink-3);font-size:12px">&ldquo;Build a 6-slide deck for a steering committee.&rdquo;</p>
+        </div>
+      </div>
+    </div>
+    <div class="slide-footer"><span class="mono">12 · Copilot in apps</span><span class="slide-number"></span></div>
+  </section>
+
+  <!-- =========================================== -->
+  <!-- Slide 13 — Power Automate start with templates -->
+  <!-- =========================================== -->
+  <section class="slide" data-notes="The point: many wins do not need premium connectors. Show the standard-connector templates Filtrona can use today. If time, do a 60-second live walkthrough of one.">
+    <div class="slide-header"><div class="kicker">Workflow automation</div><div class="timer-mirror" data-timer></div></div>
+    <div class="split-12-08">
+      <div class="stack">
+        <h2 class="display"><em>Power Automate</em> — start with templates.</h2>
+        <p class="lead">Our M365 license includes the <strong>standard connectors</strong>: Outlook, Teams, SharePoint, OneDrive, Excel Online, Forms, Approvals, Planner. That covers most weekly busywork.</p>
+        <p class="body-m" style="color:var(--ink-3)">Before automating with AI, automate the routine first.</p>
+      </div>
+      <div class="stack" style="gap:10px">
+        <div class="flow-chip"><svg><use href="#i-bell"/></svg> Weekly reminder · 30 minutes before due</div>
+        <div class="flow-chip"><svg><use href="#i-form"/></svg> Form → SharePoint list → email confirmation</div>
+        <div class="flow-chip"><svg><use href="#i-approve"/></svg> SharePoint item created → start &amp; wait for approval</div>
+        <div class="flow-chip"><svg><use href="#i-mail"/></svg> Forward emails to a Teams channel</div>
+        <div class="flow-chip"><svg><use href="#i-team"/></svg> Planner task changes status → notify chat</div>
+        <div class="flow-chip"><svg><use href="#i-doc"/></svg> Save email attachments to OneDrive folder</div>
+        <p class="body-s" style="color:var(--ink-3);margin-top:6px">All of the above use <strong>standard connectors</strong>. Premium connectors (Dataverse, SQL, Salesforce, SAP) need a paid plan — flag those separately.</p>
+      </div>
+    </div>
+    <div class="slide-footer"><span class="mono">13 · Power Automate</span><span class="slide-number"></span></div>
+  </section>
+
+  <!-- =========================================== -->
+  <!-- Slide 14 — Filtrona example: AI@Filtrona hub -->
+  <!-- =========================================== -->
+  <section class="slide" data-notes="The proof point. We already have an AI hub on SharePoint. Use this slide to point people to it. The Share-your-use-case form is the new piece — explain it briefly.">
+    <div class="slide-header"><div class="kicker">Where to find this internally</div><div class="timer-mirror" data-timer></div></div>
+    <div class="split-08-12">
+      <div class="hero-art" style="height:380px">
+        <div class="hero-shape s1" style="width:180px;height:180px;background:var(--red);top:8%;left:30%"></div>
+        <div class="hero-shape s2" style="width:180px;height:180px;background:var(--blue);bottom:8%;right:8%;animation-delay:-7s"></div>
+        <div class="hero-shape s3" style="width:160px;height:160px;background:var(--green);bottom:18%;left:8%;animation-delay:-3s"></div>
+        <div style="position:relative;z-index:2;display:grid;place-items:center;width:180px;height:180px;border-radius:32px;background:rgba(255,255,255,.85);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.9);box-shadow:0 20px 50px rgba(10,77,146,.18)">
+          <svg width="80" height="80" style="color:var(--ink)"><use href="#i-add-user"/></svg>
+        </div>
+      </div>
+      <div class="stack">
+        <h2 class="display">AI@Filtrona <em>is already live</em>.</h2>
+        <p class="lead">SharePoint hub with our curated channels: <strong>Daily Work</strong>, <strong>Video</strong>, <strong>Translation</strong> — and a Teams community for ideas.</p>
+        <div class="stack-sm" style="gap:8px">
+          <div class="flow-chip"><svg><use href="#i-chat"/></svg> Built-in M365 AI Assistant — Copilot Chat</div>
+          <div class="flow-chip"><svg><use href="#i-team"/></svg> Recap · Align · Act — Teams meeting recap</div>
+          <div class="flow-chip"><svg><use href="#i-mail"/></svg> Summarize · Respond · Automate — Outlook</div>
+          <div class="flow-chip"><svg><use href="#i-video"/></svg> PowerPoint &amp; Clipchamp · text → video</div>
+          <div class="flow-chip"><svg><use href="#i-translate"/></svg> Live caption translation (Teams &amp; Chrome)</div>
+        </div>
+        <p class="body-s" style="color:var(--ink-3);margin-top:6px">Find it: <span class="mono">SharePoint → AI@Filtrona</span>. New: <strong>Share your use case</strong> form launching with this session.</p>
+      </div>
+    </div>
+    <div class="slide-footer"><span class="mono">14 · AI@Filtrona</span><span class="slide-number"></span></div>
+  </section>
+
+  <!-- =========================================== -->
+  <!-- Slide 15 — Filtrona example: Weekly reporting agent -->
+  <!-- =========================================== -->
+  <section class="slide" data-notes="Anonymised real example. The point is not the screenshot — it's that this exists, it works, and it was built without buying anything extra. Use it to motivate Slide 16 (manufacturing use cases).">
+    <div class="slide-header"><div class="kicker">An example from our own stack</div><div class="timer-mirror" data-timer></div></div>
+    <div class="stack">
+      <h2 class="display">Weekly reporting, <em>automated</em>.</h2>
+      <p class="lead">A working example built with what we already have. No premium licenses, no external vendors.</p>
+      <div class="grid-3" style="gap:18px">
+        <div class="card flat" style="padding:22px">
+          <div class="icon-tile tile-blue"><svg><use href="#i-form"/></svg></div>
+          <h4>Submit</h4>
+          <p class="body-m">Department leads submit weekly inputs via Office Scripts inside Excel Online. A standard Power Automate flow stamps the submission.</p>
+        </div>
+        <div class="card flat" style="padding:22px">
+          <div class="icon-tile tile-green"><svg><use href="#i-spark"/></svg></div>
+          <h4>Summarise</h4>
+          <p class="body-m">When all departments are in, AI Builder generates a draft executive summary that the analyst reviews and edits — not publishes blind.</p>
+        </div>
+        <div class="card flat" style="padding:22px">
+          <div class="icon-tile tile-red"><svg><use href="#i-chat"/></svg></div>
+          <h4>Ask</h4>
+          <p class="body-m">A Copilot Studio agent, published to Teams and SharePoint, answers questions like &ldquo;what changed in HSE this week?&rdquo; — grounded only in the reporting workbook.</p>
+        </div>
+      </div>
+      <p class="body-s" style="color:var(--ink-3);margin-top:6px"><strong>Lesson:</strong> AI value compounds when you connect <em>capture → automation → assistant</em>, not when each tool is used in isolation.</p>
+    </div>
+    <div class="slide-footer"><span class="mono">15 · Weekly reporting</span><span class="slide-number"></span></div>
+  </section>
+
+  <!-- =========================================== -->
+  <!-- Slide 16 — Manufacturing-grounded use cases -->
+  <!-- =========================================== -->
+  <section class="slide" data-notes="Heaviest department lift goes to Operations and HSE because we are manufacturing. Read two from Ops and one from each other column. Don't read all 12 — invite the room to find theirs.">
+    <div class="slide-header"><div class="kicker">Where to start, by team</div><div class="timer-mirror" data-timer></div></div>
+    <div class="stack">
+      <h2 class="display">Use cases that fit <em>our</em> work.</h2>
+      <div class="uc-grid">
+        <div class="uc-card"><div class="uc-icon"><svg><use href="#i-factory"/></svg></div><h4>Operations</h4><p class="body-s">Shift handover summaries · SOP rewrites · deviation report drafting · downtime root-cause notes</p></div>
+        <div class="uc-card"><div class="uc-icon"><svg><use href="#i-shield"/></svg></div><h4>HSE</h4><p class="body-s">Incident write-up assistance · toolbox-talk drafts · audit finding summaries · translation for site teams</p></div>
+        <div class="uc-card"><div class="uc-icon"><svg><use href="#i-box"/></svg></div><h4>Supply chain</h4><p class="body-s">Supplier non-conformance letters · delay-explanation drafts · PO &amp; spec comparisons · scenario summaries</p></div>
+        <div class="uc-card"><div class="uc-icon"><svg><use href="#i-work"/></svg></div><h4>Commercial</h4><p class="body-s">Customer meeting prep · account summaries · proposal drafts · objection-response coaching</p></div>
+        <div class="uc-card"><div class="uc-icon"><svg><use href="#i-chart"/></svg></div><h4>Finance</h4><p class="body-s">Variance commentary first draft · forecast narrative · report explanation · period-close checklists</p></div>
+        <div class="uc-card"><div class="uc-icon"><svg><use href="#i-hr"/></svg></div><h4>People &amp; HR</h4><p class="body-s">Training content · policy FAQs · onboarding guides · job description drafts</p></div>
+        <div class="uc-card"><div class="uc-icon"><svg><use href="#i-code"/></svg></div><h4>IT &amp; Data</h4><p class="body-s">DAX/Power Query help · script debugging · documentation · requirements drafts · data-quality checks</p></div>
+        <div class="uc-card"><div class="uc-icon"><svg><use href="#i-bolt"/></svg></div><h4>Anyone</h4><p class="body-s">Email tone rewrite · meeting recap · long-thread summary · checklist generation</p></div>
+      </div>
+    </div>
+    <div class="slide-footer"><span class="mono">16 · By team</span><span class="slide-number"></span></div>
+  </section>
+
+  <!-- =========================================== -->
+  <!-- Slide 17 — Code & data assistance           -->
+  <!-- =========================================== -->
+  <section class="slide" data-notes="For our technical population — engineers, analysts, MES users. AI as a pair-coding partner. Worth flagging because many manufacturing folks don't think Copilot applies to them.">
+    <div class="slide-header"><div class="kicker">For the technical population</div><div class="timer-mirror" data-timer></div></div>
+    <div class="split-12-08">
+      <div class="stack">
+        <h2 class="display">Code &amp; data, <em>assisted</em>.</h2>
+        <p class="lead">Engineers, MES users, data folks: AI is a pair-coding partner. Explains, debugs, refactors, documents.</p>
+        <div class="stack-sm">
+          <div class="flow-chip"><svg><use href="#i-code"/></svg> Office Scripts · TypeScript / JavaScript for Excel automation</div>
+          <div class="flow-chip"><svg><use href="#i-grid"/></svg> Power Query M · transform errors explained in plain English</div>
+          <div class="flow-chip"><svg><use href="#i-chart"/></svg> DAX measures · &ldquo;why is this returning blank?&rdquo;</div>
+          <div class="flow-chip"><svg><use href="#i-gear"/></svg> Regex · the one part of programming nobody enjoys</div>
+          <div class="flow-chip"><svg><use href="#i-search"/></svg> Error messages · what they actually mean, in your context</div>
+        </div>
+      </div>
+      <div class="card tint-blue">
+        <h4>Worked example</h4>
+        <pre class="code"><span class="c">// Ask Copilot Chat:</span>
+&ldquo;Write an Office Script that loops through
+all worksheets, finds tables matching a
+naming pattern, and returns the row count
+of each as a Markdown table.&rdquo;
+
+<span class="c">// Then ask:</span>
+&ldquo;Refactor so it handles sheets with no
+matching table and logs which ones were
+skipped. Add JSDoc comments.&rdquo;</pre>
+        <p class="body-s" style="color:var(--ink-3)">No company data needed in the prompt — Copilot helps with the <em>shape</em> of the code; the actual data stays in your workbook.</p>
+      </div>
+    </div>
+    <div class="slide-footer"><span class="mono">17 · Code &amp; data</span><span class="slide-number"></span></div>
+  </section>
+
+  <!-- =========================================== -->
+  <!-- Slide 18 — Approved-for-work vs Personal    -->
+  <!-- =========================================== -->
+  <section class="slide" data-notes="The most important governance slide. Read the headings, then point at the data-protection banner. The line is not 'enterprise good, public bad' — it is 'work content stays in the enterprise tools, full stop'.">
+    <div class="slide-header"><div class="kicker">Two columns, one rule</div><div class="timer-mirror" data-timer></div></div>
+    <div class="stack">
+      <h2 class="display">Approved for work. <em>Or</em> personal learning.</h2>
+      <div class="split-table">
+        <div class="col left">
+          <h4>Approved for Filtrona work</h4>
+          <h3>Microsoft 365 tools</h3>
+          <ul>
+            <li>Copilot Chat (with Enterprise Data Protection)</li>
+            <li>Copilot in Word, Excel, PowerPoint, Outlook, Teams (if licensed)</li>
+            <li>Clipchamp · Power Automate · Power Apps · Power BI</li>
+            <li>Copilot Studio agents on our tenant</li>
+          </ul>
+          <p class="body-s" style="color:var(--ink-3);margin-top:8px">Use with judgement. Still follow internal classification policies.</p>
+        </div>
+        <div class="col right">
+          <h4>Fine for personal learning only</h4>
+          <h3>External public AI</h3>
+          <ul>
+            <li>ChatGPT · Claude · Gemini (consumer)</li>
+            <li>OpenAI &amp; other image / video generators</li>
+            <li>InVideo · public coding assistants</li>
+            <li>Anything where the prompt may be used to train a model</li>
+          </ul>
+          <p class="body-s" style="color:var(--ink-3);margin-top:8px">Generic examples only. <strong>No Filtrona content, no customer or supplier data.</strong></p>
+        </div>
+      </div>
+      <div class="security-banner">
+        <svg width="28" height="28" style="color:var(--red)"><use href="#i-shield"/></svg>
+        <div class="t">Confidentiality lives in the <strong>content</strong>, not the filename. Removing &ldquo;Filtrona&rdquo; from a file does not make the data safe to paste into a public tool.</div>
+      </div>
+    </div>
+    <div class="slide-footer"><span class="mono">18 · Two columns, one rule</span><span class="slide-number"></span></div>
+  </section>
+
+  <!-- =========================================== -->
+  <!-- Slide 19 — Data classification quiz         -->
+  <!-- =========================================== -->
+  <section class="slide" data-notes="Mentimeter quiz. Ask the room to vote. Then walk the principle: data classification is about CONTENT, not metadata. If a customer or competitor saw the content, would there be a problem? That's the test.">
+    <div class="slide-header"><div class="kicker">Live quiz · Mentimeter</div><div class="timer-mirror" data-timer></div></div>
+    <div class="split-12-08">
+      <div class="stack">
+        <h2 class="display">Quick quiz.</h2>
+        <div class="card tint-gold">
+          <h4>Question</h4>
+          <p class="body-l" style="color:var(--ink);font-weight:500">&ldquo;Can I upload a customer pricing workbook to a free public AI website if I remove the filename and the customer's name?&rdquo;</p>
+        </div>
+        <div class="row" style="margin-top:6px">
+          <span class="pill pill-ghost">Yes</span>
+          <span class="pill pill-ghost">Depends</span>
+          <span class="pill pill-red"><svg><use href="#i-shield"/></svg> No</span>
+        </div>
+      </div>
+      <div class="card">
+        <h4>The principle</h4>
+        <p class="body-m"><strong>Classification follows content, not metadata.</strong></p>
+        <p class="body-m">Pricing terms, margin structure, customer identity — these are sensitive whether the file is called <span class="mono">pricing-Q3.xlsx</span> or <span class="mono">untitled.xlsx</span>.</p>
+        <div class="security-banner" style="margin-top:8px">
+          <svg width="24" height="24" style="color:var(--red)"><use href="#i-alert"/></svg>
+          <div class="t"><strong>The test:</strong> if a competitor or this customer saw the content, would there be a problem? If yes — it doesn't go in a public tool, no matter how you rename it.</div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-footer"><span class="mono">19 · Quiz · Data security</span><span class="slide-number"></span></div>
+  </section>
+
+  <!-- =========================================== -->
+  <!-- Slide 20 — Build a 10-minute habit          -->
+  <!-- =========================================== -->
+  <section class="slide" data-notes="Make it actionable. Ask: pick ONE this week, do it on Wednesday. Mention the share-back at next session — public commitment increases follow-through.">
+    <div class="slide-header"><div class="kicker">This week</div><div class="timer-mirror" data-timer></div></div>
+    <div class="stack">
+      <h2 class="display">A <em>10-minute</em> habit. Pick one.</h2>
+      <p class="lead">AI skill grows like Excel skill — through repeated practical use. Choose one of these for this week.</p>
+      <div class="habit-list">
+        <div class="habit-row"><div class="num">01</div><div class="txt">Ask Copilot Chat to <strong>summarise one long email thread</strong> you've been avoiding.</div></div>
+        <div class="habit-row"><div class="num">02</div><div class="txt">Rewrite <strong>one difficult message</strong> professionally — same meaning, less heat.</div></div>
+        <div class="habit-row"><div class="num">03</div><div class="txt">Turn <strong>meeting notes into action items</strong> with owners and dates.</div></div>
+        <div class="habit-row"><div class="num">04</div><div class="txt">Ask Copilot to <strong>explain a table</strong> or suggest a formula in Excel.</div></div>
+        <div class="habit-row"><div class="num">05</div><div class="txt">Identify <strong>one repetitive workflow</strong> a Power Automate template could simplify.</div></div>
+      </div>
+    </div>
+    <div class="slide-footer"><span class="mono">20 · Habit</span><span class="slide-number"></span></div>
+  </section>
+
+  <!-- =========================================== -->
+  <!-- Slide 21 — Share your use case (community)  -->
+  <!-- =========================================== -->
+  <section class="slide" data-notes="The big community ask. Use case form is launching with this session. Top contributors and monthly best use case will be recognised on the SharePoint hub. Mention it briefly — do not labour it. End with: 'I'd love yours.'">
+    <div class="slide-header"><div class="kicker">Community</div><div class="timer-mirror" data-timer></div></div>
+    <div class="split-12-08">
+      <div class="stack">
+        <h2 class="display">Share what you tried. <em>We'll feature it.</em></h2>
+        <p class="lead">From today, you can submit your own AI use case through a Microsoft Form linked on the AI@Filtrona hub.</p>
+        <p class="body-l">We'll spotlight a <strong>Monthly Best Use Case</strong> and recognise <strong>Top Contributors</strong> on the hub. The goal isn't perfection — it's learning out loud.</p>
+        <p class="body-s" style="color:var(--ink-3)">Find it: <span class="mono">SharePoint → AI@Filtrona → Share your use case</span></p>
+      </div>
+      <div class="grid-2" style="gap:14px">
+        <div class="card tint-blue" style="padding:22px">
+          <div class="icon-tile tile-blue"><svg><use href="#i-form"/></svg></div>
+          <h4>Submit</h4>
+          <p class="body-m">5-minute Microsoft Form. Your name, your team, the prompt or flow, what worked, what didn't.</p>
+        </div>
+        <div class="card tint-green" style="padding:22px">
+          <div class="icon-tile tile-green"><svg><use href="#i-trophy"/></svg></div>
+          <h4>Featured</h4>
+          <p class="body-m">Monthly Best Use Case &amp; Top Contributors highlighted on the AI@Filtrona hub.</p>
+        </div>
+        <div class="card" style="padding:22px;grid-column:span 2">
+          <div class="icon-tile tile-gold"><svg><use href="#i-add-user"/></svg></div>
+          <h4>Discuss</h4>
+          <p class="body-m">Filtrona AI Community on Teams — share questions, prompts, and small wins.</p>
+        </div>
+      </div>
+    </div>
+    <div class="slide-footer"><span class="mono">21 · Share your use case</span><span class="slide-number"></span></div>
+  </section>
+
+  <!-- =========================================== -->
+  <!-- Slide 22 — Vote: next session              -->
+  <!-- =========================================== -->
+  <section class="slide" data-notes="Final Menti vote. Let the audience choose. Capture results — the highest score is your next session topic. This is also a soft commitment device for them to attend.">
+    <div class="slide-header"><div class="kicker">Vote · Mentimeter</div><div class="timer-mirror" data-timer></div></div>
+    <div class="stack">
+      <h2 class="display">What should we dive into <em>next</em>?</h2>
+      <div class="grid-2" style="gap:18px">
+        <div class="card flat" style="padding:22px"><div class="row"><div class="icon-tile tile-blue"><svg><use href="#i-doc"/></svg></div><h3 style="margin:0">AI over company documents</h3></div><p class="body-m">SharePoint readiness, permissions, search quality, document lifecycle.</p></div>
+        <div class="card flat" style="padding:22px"><div class="row"><div class="icon-tile tile-red"><svg><use href="#i-bolt"/></svg></div><h3 style="margin:0">Power Automate clinic</h3></div><p class="body-m">Forms intake, approvals, alerts, reporting reminders.</p></div>
+        <div class="card flat" style="padding:22px"><div class="row"><div class="icon-tile tile-green"><svg><use href="#i-chart"/></svg></div><h3 style="margin:0">AI for analytics</h3></div><p class="body-m">Excel Copilot, Power BI narratives, anomaly detection.</p></div>
+        <div class="card flat" style="padding:22px"><div class="row"><div class="icon-tile tile-gold"><svg><use href="#i-video"/></svg></div><h3 style="margin:0">AI content studio</h3></div><p class="body-m">PowerPoint, Clipchamp, image generation for internal comms.</p></div>
+      </div>
+    </div>
+    <div class="slide-footer"><span class="mono">22 · Vote</span><span class="slide-number"></span></div>
+  </section>
+
+  <!-- =========================================== -->
+  <!-- Slide 23 — Closing                          -->
+  <!-- =========================================== -->
+  <section class="slide" data-notes="Land the close cleanly. Read the five lines slowly. Then say: 'See you in the AI@Filtrona Teams community. Pick one habit. We'll share back next month.' Then thank you, then Q&amp;A.">
+    <div class="slide-header"><div class="brand"><img src="assets/filtrona-logo-placeholder.svg" alt=""><span class="dot"></span><span class="meta">Thank you</span></div><div class="timer-mirror" data-timer></div></div>
+    <div class="split-12-08">
+      <div class="stack">
+        <div class="eyebrow">Take-home</div>
+        <h2 class="display">AI does not replace thinking.<br/>It raises the value of <em>people who think clearly</em>.</h2>
+        <div class="stack-sm" style="margin-top:16px">
+          <p class="body-l"><strong>1.</strong> Start with Copilot Chat — it's already yours.</p>
+          <p class="body-l"><strong>2.</strong> Write better prompts (CRAFT-V).</p>
+          <p class="body-l"><strong>3.</strong> Protect data. Classification follows content.</p>
+          <p class="body-l"><strong>4.</strong> Verify everything that matters.</p>
+          <p class="body-l"><strong>5.</strong> Build one habit this week. Share back next month.</p>
+        </div>
+      </div>
+      <div class="hero-art" style="height:380px">
+        <div class="hero-shape s1" style="width:200px;height:200px;background:var(--red);top:10%;left:10%"></div>
+        <div class="hero-shape s2" style="width:200px;height:200px;background:var(--blue);bottom:10%;right:10%;animation-delay:-6s"></div>
+        <div class="hero-shape s3" style="width:180px;height:180px;background:var(--green);top:35%;left:35%;animation-delay:-12s"></div>
+        <div style="position:relative;z-index:2;font-family:'Fraunces',serif;font-weight:500;font-size:96px;color:var(--ink);line-height:.95;letter-spacing:-.04em;text-align:center">Thank<br/><em>you</em>.</div>
+      </div>
+    </div>
+    <div class="slide-footer"><span class="mono">Filtrona AI Programme · 19 May 2026 · Fiona Qi</span><span class="slide-number"></span></div>
+  </section>
+
+  <!-- Notes panel (toggled with N) -->
+  <div class="notes-panel" id="notesPanel">
+    <h4>Speaker notes</h4>
+    <p id="notesContent">—</p>
+  </div>
+
+  <!-- Progress bar -->
+  <div class="progress"><div class="fill" id="progressFill"></div></div>
+
+  </div>
+</div>
+
+<!-- Help legend -->
+<div class="help">
+  <kbd>←</kbd><kbd>→</kbd> nav · <kbd>N</kbd> notes · <kbd>F</kbd> full · <kbd>T</kbd> timer · <kbd>M</kbd> sound
+</div>
+
+<!-- Controls -->
+<div class="controls">
+  <button class="ctrl-btn" id="btnNotes" title="Speaker notes (N)"><svg><use href="#i-notes"/></svg>Notes</button>
+  <button class="ctrl-btn" id="btnTimer" title="Toggle timer (T)"><svg><use href="#i-play"/></svg>Timer</button>
+  <button class="ctrl-btn" id="btnMusic" title="Background sound (M)"><svg><use href="#i-music"/></svg>Sound</button>
+  <button class="ctrl-btn" id="btnFull" title="Fullscreen (F)"><svg><use href="#i-expand"/></svg>Full</button>
+</div>
+
+<script>
+/* ====== CONFIG: edit these before the session ====== */
+const CONFIG = {
+  mentimeterJoinUrl: "https://www.menti.com/YOUR-CODE",
+  feedbackFormUrl:   "https://forms.office.com/r/YOUR-FEEDBACK-FORM-ID",
+  useCaseFormUrl:    "https://forms.office.com/r/YOUR-USE-CASE-FORM-ID",
+  intranetUrl:       "https://filtrona.sharepoint.com/sites/AIFiltrona",
+  teamsCommunityUrl: "https://teams.microsoft.com/l/channel/your-AI-community",
+  logoUrl:           "assets/filtrona-logo-placeholder.svg",
+  sessionMinutes:    40
+};
+
+/* ====== Deck logic ====== */
+const slides = Array.from(document.querySelectorAll('.slide'));
+const total = slides.length;
+let current = 0;
+
+function show(i){
+  i = Math.max(0, Math.min(total-1, i));
+  slides[current].classList.remove('active');
+  slides[current].classList.add('prev');
+  current = i;
+  slides[current].classList.remove('prev');
+  slides[current].classList.add('active');
+  updateUI();
+}
+
+function updateUI(){
+  document.querySelectorAll('.slide-number').forEach(el=>{ el.textContent = String(current+1).padStart(2,'0') + ' / ' + String(total).padStart(2,'0'); });
+  const pct = ((current+1)/total)*100;
+  document.getElementById('progressFill').style.width = pct + '%';
+  const notes = slides[current].dataset.notes || '—';
+  document.getElementById('notesContent').textContent = notes;
+}
+
+document.addEventListener('keydown', (e)=>{
+  if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+  switch(e.key){
+    case 'ArrowRight':
+    case ' ':
+    case 'PageDown':
+      show(current+1); e.preventDefault(); break;
+    case 'ArrowLeft':
+    case 'PageUp':
+      show(current-1); e.preventDefault(); break;
+    case 'Home': show(0); e.preventDefault(); break;
+    case 'End':  show(total-1); e.preventDefault(); break;
+    case 'n': case 'N': toggleNotes(); break;
+    case 'f': case 'F': toggleFull(); break;
+    case 't': case 'T': toggleTimer(); break;
+    case 'm': case 'M': toggleMusic(); break;
+  }
+});
+
+/* Speaker notes */
+const notesPanel = document.getElementById('notesPanel');
+function toggleNotes(){ notesPanel.classList.toggle('visible'); document.getElementById('btnNotes').classList.toggle('active'); }
+document.getElementById('btnNotes').addEventListener('click', toggleNotes);
+
+/* Fullscreen */
+function toggleFull(){
+  if (!document.fullscreenElement){ document.documentElement.requestFullscreen?.(); }
+  else { document.exitFullscreen?.(); }
+}
+document.getElementById('btnFull').addEventListener('click', toggleFull);
+
+/* Timer */
+let timer = { running:false, remaining: CONFIG.sessionMinutes * 60, handle:null };
+function fmt(s){
+  const m = Math.floor(s/60), r = s%60;
+  return String(m).padStart(2,'0') + ':' + String(r).padStart(2,'0');
+}
+function tick(){
+  if (!timer.running) return;
+  if (timer.remaining > 0) timer.remaining--;
+  document.querySelectorAll('#clockLabel, [data-timer]').forEach(el=>{ el.textContent = fmt(timer.remaining); });
+  if (timer.remaining <= 0){ stopTimer(); }
+}
+function startTimer(){
+  if (timer.running) return;
+  timer.running = true;
+  timer.handle = setInterval(tick, 1000);
+  document.getElementById('btnTimer').classList.add('active');
+  document.getElementById('btnTimer').innerHTML = '<svg><use href="#i-pause"/></svg>Timer';
+}
+function stopTimer(){
+  timer.running = false;
+  clearInterval(timer.handle); timer.handle = null;
+  document.getElementById('btnTimer').classList.remove('active');
+  document.getElementById('btnTimer').innerHTML = '<svg><use href="#i-play"/></svg>Timer';
+}
+function toggleTimer(){ timer.running ? stopTimer() : startTimer(); }
+document.getElementById('btnTimer').addEventListener('click', toggleTimer);
+document.querySelectorAll('#clockLabel, [data-timer]').forEach(el=>{ el.textContent = fmt(timer.remaining); });
+
+/* Background sound — subtle web-audio drone, can be muted */
+let audioCtx = null, audioOn = false, oscNodes = [];
+function startSound(){
+  if (audioOn) return;
+  audioOn = true;
+  audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+  const master = audioCtx.createGain();
+  master.gain.value = 0.0; master.connect(audioCtx.destination);
+  master.gain.linearRampToValueAtTime(0.03, audioCtx.currentTime + 1.5);
+  [220, 277.18, 329.63].forEach((f,i)=>{
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = 'sine'; o.frequency.value = f;
+    g.gain.value = 0.18 - i*0.04;
+    o.connect(g); g.connect(master);
+    o.start();
+    oscNodes.push({o,g,master});
+  });
+  document.getElementById('btnMusic').classList.add('active');
+}
+function stopSound(){
+  if (!audioOn) return;
+  audioOn = false;
+  oscNodes.forEach(({o,g,master})=>{
+    try{
+      master.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.4);
+      setTimeout(()=>{ o.stop(); }, 500);
+    }catch(e){}
+  });
+  oscNodes = [];
+  document.getElementById('btnMusic').classList.remove('active');
+}
+function toggleMusic(){ audioOn ? stopSound() : startSound(); }
+document.getElementById('btnMusic').addEventListener('click', toggleMusic);
+
+/* Apply CONFIG */
+document.addEventListener('DOMContentLoaded', ()=>{
+  document.querySelectorAll('.brand img').forEach(img=>{ img.src = CONFIG.logoUrl; });
+  // Inject mentimeter URL where placeholder exists
+  document.querySelectorAll('.mono').forEach(el=>{
+    if (el.textContent.includes('CONFIG.mentimeterJoinUrl')) el.textContent = CONFIG.mentimeterJoinUrl;
+  });
+});
+
+updateUI();
+</script>
+
+</body>
+</html>
